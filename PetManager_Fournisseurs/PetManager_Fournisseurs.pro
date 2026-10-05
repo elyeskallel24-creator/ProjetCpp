@@ -1,6 +1,9 @@
 QT += widgets sql charts printsupport svg
 CONFIG += c++17
 
+# Accents et emojis du code bien lus avec le compilateur MSVC (module Stock)
+msvc: QMAKE_CXXFLAGS += /utf-8
+
 SOURCES += \
     customdialog.cpp \
     databasemanager.cpp \
@@ -11,7 +14,8 @@ SOURCES += \
     mockcommandesprovider.cpp \
     supplierrecommender.cpp \
     badgedelegate.cpp \
-    icondelegate.cpp
+    icondelegate.cpp \
+    graphiques.cpp
 
 HEADERS += \
     customdialog.h \
@@ -22,7 +26,9 @@ HEADERS += \
     mockcommandesprovider.h \
     supplierrecommender.h \
     badgedelegate.h \
-    icondelegate.h
+    icondelegate.h \
+    graphiques.h
 
 FORMS += mainwindow.ui
-RESOURCES += resources.qrc
+RESOURCES += resources.qrc \
+    ressources.qrc
