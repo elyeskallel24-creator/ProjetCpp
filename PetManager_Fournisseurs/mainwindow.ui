@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Pet Manager - Smart Pet Care Center</string></property>
+  <property name="minimumSize"><size><width>1280</width><height>720</height></size></property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="layout_main">
+    <item>
+     <widget class="QFrame" name="frame_sidebar">
+      <property name="maximumSize"><size><width>230</width><height>16777215</height></size></property>
+      <layout class="QVBoxLayout" name="layout_sidebar">
+       <item><widget class="QLabel" name="label_logo"/></item>
+       <item><widget class="QPushButton" name="btn_menu_accueil"><property name="text"><string> Accueil</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_menu_animaux"><property name="text"><string>🐾 Animaux</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_menu_rdv"><property name="text"><string>📅 Rendez-vous</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_menu_stock"><property name="text"><string>📦 Stock</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_menu_commandes"><property name="text"><string>🛒 Commandes</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_menu_fournisseurs"><property name="text"><string>🚚 Fournisseurs</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_menu_employes"><property name="text"><string> Employés</string></property></widget></item>
+       <item><widget class="QPushButton" name="btn_menu_parametres"><property name="text"><string>⚙️ Paramètres</string></property></widget></item>
+       <item><spacer name="verticalSpacer"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_content">
+      <layout class="QVBoxLayout" name="layout_content">
+       <item>
+        <widget class="QFrame" name="frame_header">
+         <layout class="QHBoxLayout" name="layout_header">
+          <item><widget class="QLabel" name="label_title_icon"><property name="text"><string>🚚</string></property><property name="styleSheet"><string>font-size: 28px;</string></property></widget></item>
+          <item><widget class="QLabel" name="label_page_title"><property name="text"><string>Gestion des fournisseurs</string></property></widget></item>
+          <item><spacer name="hSpacer_header"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+          <item>
+           <widget class="QFrame" name="frame_bell_container">
+            <property name="frameShape"><enum>QFrame::NoFrame</enum></property>
+            <layout class="QGridLayout" name="layout_bell_grid">
+             <property name="leftMargin"><number>0</number></property>
+             <property name="topMargin"><number>0</number></property>
+             <property name="rightMargin"><number>0</number></property>
+             <property name="bottomMargin"><number>0</number></property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_bell"><property name="text"><string>🔔</string></property><property name="styleSheet"><string>font-size: 24px;</string></property></widget>
+             </item>
+             <item row="0" column="0" alignment="Qt::AlignTop|Qt::AlignRight">
+              <widget class="QLabel" name="label_notif_badge"><property name="text"><string>0</string></property><property name="styleSheet"><string>background-color: #D9534F; color: white; border-radius: 9px; font-size: 10px; font-weight: bold; padding: 2px 5px; min-width: 18px; min-height: 18px; qproperty-alignment: AlignCenter;</string></property></widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item><widget class="QLabel" name="label_avatar"><property name="text"><string>👤</string></property><property name="alignment"><set>Qt::AlignCenter</set></property><property name="styleSheet"><string>font-size: 24px; color: #2A8C82; border: 2px solid #2A8C82; border-radius: 22px; min-width: 44px; min-height: 44px;</string></property></widget></item>
+          <item>
+           <layout class="QVBoxLayout" name="layout_user">
+            <item><widget class="QLabel" name="label_user_name"><property name="text"><string>Dr. Sami Ben Ali</string></property></widget></item>
+            <item><widget class="QLabel" name="label_user_role"><property name="text"><string>Médecin Vétérinaire</string></property></widget></item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_kpis">
+         <layout class="QHBoxLayout" name="layout_kpis">
+          <item>
+           <widget class="QFrame" name="card_kpi1">
+            <layout class="QHBoxLayout" name="layout_kpi1">
+             <item><widget class="QLabel" name="label_kpi1_icon"><property name="text"><string>🚚</string></property><property name="styleSheet"><string>font-size: 32px;</string></property></widget></item>
+             <item>
+              <layout class="QVBoxLayout" name="layout_kpi1_txt">
+               <item><widget class="QLabel" name="label_kpi1_title"><property name="text"><string>Total fournisseurs</string></property><property name="alignment"><set>Qt::AlignLeft</set></property></widget></item>
+               <item><widget class="QLabel" name="label_kpi1_value"><property name="text"><string>0</string></property><property name="alignment"><set>Qt::AlignLeft</set></property></widget></item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="card_kpi2">
+            <layout class="QHBoxLayout" name="layout_kpi2">
+             <item><widget class="QLabel" name="label_kpi2_icon"><property name="text"><string>✅</string></property><property name="styleSheet"><string>font-size: 32px;</string></property></widget></item>
+             <item>
+              <layout class="QVBoxLayout" name="layout_kpi2_txt">
+               <item><widget class="QLabel" name="label_kpi2_title"><property name="text"><string>Fournisseurs actifs</string></property><property name="alignment"><set>Qt::AlignLeft</set></property></widget></item>
+               <item><widget class="QLabel" name="label_kpi2_value"><property name="text"><string>0</string></property><property name="alignment"><set>Qt::AlignLeft</set></property></widget></item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="card_kpi3">
+            <layout class="QHBoxLayout" name="layout_kpi3">
+             <item><widget class="QLabel" name="label_kpi3_icon"><property name="text"><string>⭐</string></property><property name="styleSheet"><string>font-size: 32px;</string></property></widget></item>
+             <item>
+              <layout class="QVBoxLayout" name="layout_kpi3_txt">
+               <item><widget class="QLabel" name="label_kpi3_title"><property name="text"><string>Fiabilité moyenne</string></property><property name="alignment"><set>Qt::AlignLeft</set></property></widget></item>
+               <item><widget class="QLabel" name="label_kpi3_value"><property name="text"><string>—</string></property><property name="alignment"><set>Qt::AlignLeft</set></property></widget></item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_toolbar">
+         <layout class="QHBoxLayout" name="layout_toolbar">
+          <item><widget class="QLineEdit" name="lineEdit_recherche"><property name="placeholderText"><string>Rechercher un fournisseur par nom...</string></property></widget></item>
+          <item>
+           <widget class="QComboBox" name="comboBox_tri">
+            <item><property name="text"><string>Aucun tri</string></property></item>
+            <item><property name="text"><string>Nom (A → Z)</string></property></item>
+            <item><property name="text"><string>Nom (Z → A)</string></property></item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_table">
+         <layout class="QVBoxLayout" name="layout_table">
+          <item><widget class="QTableWidget" name="tableWidget_fournisseurs"/></item>
+          <item><widget class="QLabel" name="label_table_footer"><property name="text"><string>Affichage de 0 sur 0 fournisseurs</string></property></widget></item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_bottom">
+         <layout class="QHBoxLayout" name="layout_bottom">
+          <item>
+           <widget class="QFrame" name="card_chart">
+            <layout class="QVBoxLayout" name="layout_card_chart">
+             <item>
+              <layout class="QHBoxLayout" name="layout_chart_head">
+               <item><widget class="QLabel" name="label_chart_title"><property name="text"><string> Statistiques</string></property></widget></item>
+               <item>
+                <widget class="QComboBox" name="comboBox_chart">
+                 <item><property name="text"><string>Nombre par type</string></property></item>
+                 <item><property name="text"><string>Répartition par statut</string></property></item>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="frame_chart">
+               <property name="minimumSize"><size><width>0</width><height>180</height></size></property>
+               <layout class="QVBoxLayout" name="layout_chart_container"></layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="card_alerts">
+            <layout class="QVBoxLayout" name="layout_card_alerts">
+             <item>
+              <layout class="QHBoxLayout" name="layout_alerts_head">
+               <item><widget class="QLabel" name="label_alerts_title"><property name="text"><string>⚠️ Alertes contrat</string></property></widget></item>
+               <item><widget class="QLabel" name="label_alerts_badge"><property name="text"><string>0</string></property></widget></item>
+              </layout>
+             </item>
+             <item><widget class="QListWidget" name="listWidget_alertes"/></item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="card_suggestions">
+            <layout class="QVBoxLayout" name="layout_card_sugg">
+             <item>
+              <layout class="QHBoxLayout" name="layout_sugg_head">
+               <item><widget class="QLabel" name="label_sugg_title"><property name="text"><string>💡 Recommandations</string></property></widget></item>
+               <item>
+                <widget class="QComboBox" name="comboBox_rec_type">
+                 <item><property name="text"><string>Tous les types</string></property></item>
+                 <item><property name="text"><string>Alimentation</string></property></item>
+                 <item><property name="text"><string>Médicaments</string></property></item>
+                 <item><property name="text"><string>Équipement</string></property></item>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item><widget class="QListWidget" name="listWidget_suggestions"/></item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_right">
+      <property name="minimumSize"><size><width>360</width><height>0</height></size></property>
+      <property name="maximumSize"><size><width>360</width><height>16777215</height></size></property>
+      <layout class="QVBoxLayout" name="layout_right">
+       <property name="leftMargin"><number>12</number></property>
+       <property name="topMargin"><number>12</number></property>
+       <property name="rightMargin"><number>12</number></property>
+       <property name="bottomMargin"><number>12</number></property>
+       <item>
+        <widget class="QLabel" name="label_form_title"><property name="text"><string>+  Ajouter un fournisseur</string></property></widget>
+       </item>
+       <item>
+        <widget class="QScrollArea" name="scrollArea_form">
+         <property name="frameShape"><enum>QFrame::NoFrame</enum></property>
+         <property name="widgetResizable"><bool>true</bool></property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry"><rect><x>0</x><y>0</y><width>320</width><height>600</height></rect></property>
+          <layout class="QVBoxLayout" name="layout_form">
+           <property name="spacing"><number>4</number></property>
+           <property name="leftMargin"><number>0</number></property>
+           <property name="topMargin"><number>0</number></property>
+           <property name="rightMargin"><number>0</number></property>
+           <property name="bottomMargin"><number>0</number></property>
+           <item><widget class="QLabel" name="label_nom"><property name="text"><string>Nom *</string></property></widget></item>
+           <item><widget class="QLineEdit" name="lineEdit_nom"><property name="placeholderText"><string>Ex : Ben Ali Distribution</string></property></widget></item>
+           <item><widget class="QLabel" name="label_contact"><property name="text"><string>Contact</string></property></widget></item>
+           <item><widget class="QLineEdit" name="lineEdit_contact"><property name="placeholderText"><string>Ex : Mohamed Ben Ali</string></property></widget></item>
+           <item>
+            <layout class="QHBoxLayout" name="layout_tel_email">
+             <item>
+              <layout class="QVBoxLayout" name="layout_tel">
+               <item><widget class="QLabel" name="label_tel"><property name="text"><string>Téléphone *</string></property></widget></item>
+               <item><widget class="QLineEdit" name="lineEdit_tel"><property name="placeholderText"><string>Ex : 22 123 456</string></property></widget></item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="layout_email">
+               <item><widget class="QLabel" name="label_email"><property name="text"><string>Email *</string></property></widget></item>
+               <item><widget class="QLineEdit" name="lineEdit_email"><property name="placeholderText"><string>Ex : contact@fournisseur.tn</string></property></widget></item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item><widget class="QLabel" name="label_adresse"><property name="text"><string>Adresse</string></property></widget></item>
+           <item><widget class="QLineEdit" name="lineEdit_adresse"><property name="placeholderText"><string>Ex : 12 av. Habib Bourguiba, Tunis</string></property></widget></item>
+           <item>
+            <layout class="QHBoxLayout" name="layout_type_status">
+             <item>
+              <layout class="QVBoxLayout" name="layout_type">
+               <item><widget class="QLabel" name="label_type"><property name="text"><string>Type de produit *</string></property></widget></item>
+               <item><widget class="QComboBox" name="comboBox_type"><item><property name="text"><string>Alimentation</string></property></item><item><property name="text"><string>Accessoires</string></property></item><item><property name="text"><string>Soins et hygiène</string></property></item><item><property name="text"><string>Médicaments</string></property></item><item><property name="text"><string>Équipement</string></property></item></widget></item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="layout_status">
+               <item><widget class="QLabel" name="label_status"><property name="text"><string>Statut *</string></property></widget></item>
+               <item><widget class="QComboBox" name="comboBox_status"><item><property name="text"><string>Actif</string></property></item><item><property name="text"><string>Suspendu</string></property></item><item><property name="text"><string>Inactif</string></property></item></widget></item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="layout_quantite_prix">
+             <item>
+              <layout class="QVBoxLayout" name="layout_quantite">
+               <item><widget class="QLabel" name="label_quantite"><property name="text"><string>Quantité *</string></property></widget></item>
+               <item><widget class="QSpinBox" name="spinBox_quantite"><property name="maximum"><number>999999</number></property></widget></item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="layout_prix">
+               <item><widget class="QLabel" name="label_prix"><property name="text"><string>Prix unitaire (TND) *</string></property></widget></item>
+               <item><widget class="QDoubleSpinBox" name="doubleSpinBox_prix"><property name="suffix"><string> TND</string></property><property name="decimals"><number>3</number></property><property name="maximum"><number>999999</number></property></widget></item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item><widget class="QLabel" name="label_date"><property name="text"><string>Date de contrat *</string></property></widget></item>
+           <item><widget class="QDateEdit" name="dateEdit_contrat"><property name="calendarPopup"><bool>true</bool></property><property name="displayFormat"><string>dd/MM/yyyy</string></property></widget></item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item><widget class="QPushButton" name="btn_enregistrer"><property name="text"><string>💾 Enregistrer</string></property><property name="minimumSize"><size><width>0</width><height>36</height></size></property></widget></item>
+       <item>
+        <layout class="QHBoxLayout" name="layout_mod_ann">
+         <item><widget class="QPushButton" name="btn_modifier"><property name="text"><string>✏️ Modifier</string></property><property name="minimumSize"><size><width>0</width><height>36</height></size></property><property name="enabled"><bool>false</bool></property></widget></item>
+         <item><widget class="QPushButton" name="btn_annuler"><property name="text"><string>❌ Annuler</string></property><property name="minimumSize"><size><width>0</width><height>36</height></size></property><property name="enabled"><bool>false</bool></property></widget></item>
+        </layout>
+       </item>
+       <item><widget class="QPushButton" name="btn_supprimer"><property name="text"><string>🗑 Supprimer</string></property><property name="minimumSize"><size><width>0</width><height>36</height></size></property></widget></item>
+       <item>
+        <widget class="QFrame" name="card_export">
+         <layout class="QVBoxLayout" name="layout_card_export">
+          <item><widget class="QLabel" name="label_export_title"><property name="text"><string>📤 Export</string></property></widget></item>
+          <item><widget class="QLabel" name="label_export_desc"><property name="text"><string>Générez la liste complète pour l'archivage.</string></property><property name="wordWrap"><bool>true</bool></property></widget></item>
+          <item>
+           <layout class="QHBoxLayout" name="layout_export_btns">
+            <item><widget class="QPushButton" name="btn_export_pdf"><property name="text"><string>📄 Exporter PDF</string></property></widget></item>
+            <item><widget class="QPushButton" name="btn_export_excel"><property name="text"><string>📊 Exporter Excel</string></property></widget></item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar"/>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
