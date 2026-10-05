@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>rdv</class>
+ <widget class="QMainWindow" name="rdv">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Pet Manage - Gestion des rendez-vous</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>9</y>
+      <width>1261</width>
+      <height>681</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page">
+     <widget class="QFrame" name="menu">
+      <property name="geometry">
+       <rect>
+        <x>-10</x>
+        <y>-10</y>
+        <width>220</width>
+        <height>720</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string>QFrame#menu { background-color: #eafaf1; border-right: 1px solid #d5f5e3; }</string>
+      </property>
+      <widget class="QLabel" name="labelLogo">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>180</width>
+         <height>50</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;b style='color:#0e6655; font-size:16px;'&gt;🐾 Pet Manage&lt;/b&gt;&lt;br&gt;&lt;span style='color:#7f8c8d; font-size:10px;'&gt;- Center Management -&lt;/span&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnAccueil">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>100</y>
+         <width>190</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Accueil</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnAnimaux">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>150</y>
+         <width>190</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Animaux</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnRendezVous">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>200</y>
+         <width>190</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string>background-color: #d4efdf; color: #0e6655; font-weight: bold; border-radius: 8px;</string>
+       </property>
+       <property name="text">
+        <string>  Rendez-Vous</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnStocks">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>250</y>
+         <width>190</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Stocks</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnProprietaires">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>300</y>
+         <width>190</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Commande</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnFournisseurs">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>350</y>
+         <width>190</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Fournisseurs</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnEmployes">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>400</y>
+         <width>190</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Employés</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnParametres">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>450</y>
+         <width>190</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>  Paramétres</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QFrame" name="modification">
+      <property name="geometry">
+       <rect>
+        <x>1000</x>
+        <y>-10</y>
+        <width>270</width>
+        <height>720</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string>QFrame#modification { background-color: white; border-left: 1px solid #e0e0e0; }</string>
+      </property>
+      <widget class="QLabel" name="labelPicTitre">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>200</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string>font-weight: bold; font-size: 14px; color: #2c3e50;</string>
+       </property>
+       <property name="text">
+        <string>Modifier le rendez-vous</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelId">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>70</y>
+         <width>60</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="lineEditId">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>95</y>
+         <width>230</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelDate">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>135</y>
+         <width>60</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Date</string>
+       </property>
+      </widget>
+      <widget class="QDateTimeEdit" name="dateEditRdv">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>160</y>
+         <width>230</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelHeure">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>200</y>
+         <width>60</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Heure</string>
+       </property>
+      </widget>
+      <widget class="QTimeEdit" name="timeEditRdv">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>225</y>
+         <width>230</width>
+         <height>30</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelAnimal">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>265</y>
+         <width>60</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Animal</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboAnimal">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>290</y>
+         <width>230</width>
+         <height>30</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelProprio">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>330</y>
+         <width>80</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Propriétaire</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboProprietaire">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>355</y>
+         <width>230</width>
+         <height>30</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelVet">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>395</y>
+         <width>80</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Vétérinaire</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboVeterinaire">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>420</y>
+         <width>230</width>
+         <height>30</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelStatut">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>460</y>
+         <width>60</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Statut</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboStatut">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>485</y>
+         <width>230</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>Confirmé</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>En attente</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Annulé</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Terminé</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QPushButton" name="btnAnnuler">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>550</y>
+         <width>105</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string>border: 1px solid #0e6655; color: #0e6655; border-radius: 6px; font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Annuler</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton">
+       <property name="geometry">
+        <rect>
+         <x>135</x>
+         <y>550</y>
+         <width>115</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string>background-color: #0e6655; color: white; border-radius: 6px; font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Enregistrer</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="contenu" native="true">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>-10</y>
+        <width>790</width>
+        <height>720</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string>background-color: #f8f9f9;</string>
+      </property>
+      <widget class="QLineEdit" name="editRecherche">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>90</y>
+         <width>280</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>🔍 Rechercher un rendez-vous...</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboTri">
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>90</y>
+         <width>140</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>Trier par : Date</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QPushButton" name="btnAjouter">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>90</y>
+         <width>110</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string>background-color: #0e6655; color: white; font-weight: bold; border-radius: 6px;</string>
+       </property>
+       <property name="text">
+        <string>+ Ajouter</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="tableWidget">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>145</y>
+         <width>730</width>
+         <height>250</height>
+        </rect>
+       </property>
+       <property name="columnCount">
+        <number>8</number>
+       </property>
+       <column>
+        <property name="text">
+         <string>ID</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Date</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Heure</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Animal</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Propriétaire</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Vétérinaire</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Statut</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Actions</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QWidget" name="widgetDonut" native="true">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>430</y>
+         <width>330</width>
+         <height>250</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QFrame" name="framePicJours">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>430</y>
+         <width>190</width>
+         <height>250</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string>background: white; border-radius: 10px;</string>
+       </property>
+      </widget>
+      <widget class="QFrame" name="framePicHeures">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>430</y>
+         <width>190</width>
+         <height>250</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string>background: white; border-radius: 10px;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnExportPdf">
+       <property name="geometry">
+        <rect>
+         <x>620</x>
+         <y>90</y>
+         <width>141</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #ffffff;
+    color: #059669;
+    border: 2px solid #059669;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+QPushButton:hover {
+    background-color: #ecfdf5;
+}</string>
+       </property>
+       <property name="text">
+        <string> Exporter PDF</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2"/>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

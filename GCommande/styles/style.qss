@@ -1,0 +1,161 @@
+/* ==========================================================
+   Pet Manager - thème (palette issue de la maquette)
+   Teal foncé  : #0B5D63   Teal principal : #0F766E
+   Fond page   : #F3F6F9   Texte         : #1F2937
+   ========================================================== */
+
+* {
+    font-family: "Segoe UI", "Roboto", sans-serif;
+    font-size: 9pt;
+}
+
+QMainWindow, QWidget#centralwidget, QWidget#page_5, QWidget#page_6 {
+    background-color: #F3F6F9;
+}
+
+QLabel {
+    background: transparent;
+    color: #1F2937;
+}
+
+/* ---------- Barre latérale ---------- */
+QFrame#frame {
+    background-color: #0B5D63;
+    border: none;
+    border-radius: 0px;
+}
+QFrame#frame QLabel {
+    background: transparent;
+}
+QFrame#frame QPushButton {
+    background-color: transparent;
+    color: #E6F4F3;
+    border: none;
+    border-radius: 6px;
+    text-align: left;
+    padding-left: 8px;
+    font-size: 8.5pt;
+}
+QFrame#frame QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+QFrame#frame QPushButton:pressed {
+    background-color: rgba(255, 255, 255, 0.20);
+}
+/* bouton de la page active */
+QFrame#frame QPushButton[active="true"] {
+    background-color: #137A80;
+    color: white;
+    font-weight: 600;
+}
+
+/* ---------- En-tête ---------- */
+QFrame#frame_2 {
+    background-color: transparent;
+    border: none;
+}
+QLabel#label_2 {
+    color: #0F2A43;
+    font-size: 15pt;
+    font-weight: 700;
+}
+
+/* ---------- Champs de saisie ---------- */
+QLineEdit, QComboBox {
+    background-color: white;
+    color: #1F2937;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    padding: 1px 8px;
+    selection-background-color: #0F766E;
+}
+QLineEdit:focus, QComboBox:focus {
+    border: 1px solid #0F766E;
+}
+QComboBox::drop-down {
+    border: none;
+    width: 22px;
+}
+QComboBox QAbstractItemView {
+    background: white;
+    color: #1F2937;
+    border: 1px solid #D1D5DB;
+    selection-background-color: #E6F4F3;
+    selection-color: #0B5D63;
+}
+
+/* ---------- Boutons principaux ---------- */
+QPushButton#pushButton_8, QPushButton#pushButton_2 {
+    background-color: #0F766E;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+}
+QPushButton#pushButton_8:hover, QPushButton#pushButton_2:hover {
+    background-color: #0B5D63;
+}
+QPushButton#pushButton_8:pressed, QPushButton#pushButton_2:pressed {
+    background-color: #084A4F;
+}
+
+/* ---------- Tableau ---------- */
+QTableView {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    gridline-color: #EEF2F6;
+}
+QLabel#label_6, QLabel#label_7, QLabel#label_8,
+QLabel#label_9, QLabel#label_10 {
+    color: #374151;
+    font-weight: 700;
+}
+
+/* Badge de statut "Commandée" (liste + détails) */
+QLabel#label_14, QLabel#label_19 {
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+    border-radius: 9px;
+    padding: 0px 6px;
+    font-weight: 600;
+}
+
+/* Actions : U = modifier, D = supprimer */
+QPushButton#pushButton_11, QPushButton#pushButton_12 {
+    border-radius: 5px;
+    border: none;
+    padding: 0px;
+    font-weight: 700;
+    color: white;
+}
+QPushButton#pushButton_11 { background-color: #0F766E; }
+QPushButton#pushButton_11:hover { background-color: #0B5D63; }
+QPushButton#pushButton_12 { background-color: #DC2626; }
+QPushButton#pushButton_12:hover { background-color: #B91C1C; }
+
+/* ---------- Cartes (formulaire + détails) ---------- */
+QFrame#frame_3, QFrame#frame_4 {
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+}
+QFrame#frame_3 QLabel, QFrame#frame_4 QLabel {
+    border: none;
+}
+QLabel#label_4, QLabel#label_15 {
+    color: #0B5D63;
+    font-weight: 700;
+    font-size: 10pt;
+}
+/* Titre de la carte : fond teal comme "Détails de la commande" */
+QLabel#label_20, QLabel#label_21, QLabel#label_22,
+QLabel#label_23, QLabel#label_25 {
+    color: #6B7280;
+}
+
+/* ---------- Barre d'état ---------- */
+QStatusBar {
+    background: #F3F6F9;
+    color: #6B7280;
+}
