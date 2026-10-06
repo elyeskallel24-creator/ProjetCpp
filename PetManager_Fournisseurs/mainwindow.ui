@@ -3805,6 +3805,698 @@ QTableWidget::indicator { width:16px; height:16px; }</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="pageCommandes">
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string>#pageCommandes, #pageGestionCommandes { background-color:#F4F8F8; }
+
+QLabel { background:transparent; border:none; color:#2D3436; font-size:13px; }
+QLabel#lblTitreCommande { font-size:26px; font-weight:bold; color:#1E3A3A; }
+QLabel#lblSousTitreCommande { font-size:13px; color:#6B7280; }
+
+QLineEdit, QComboBox {
+  border:1px solid #D5E0E0; border-radius:6px; padding:0 10px;
+  background:white; color:#1E3A3A; font-size:13px; min-height:32px; }
+QLineEdit:focus, QComboBox:focus { border:1px solid #2A8C82; }
+QComboBox::drop-down { subcontrol-origin:padding; subcontrol-position:center right; width:30px; border:none; }
+QComboBox::down-arrow { image:url(:/icones/fleche_bas.png); width:12px; height:12px; }
+QComboBox QAbstractItemView {
+  background:white; color:#1E3A3A; border:1px solid #D5E0E0; outline:0; padding:4px;
+  selection-background-color:#E6F2F1; selection-color:#1E3A3A; }
+
+QPushButton#btnAjouterCommande, QPushButton#btnEnregistrerCommande, QPushButton#btnExporterCommande {
+  background-color:#2A8C82; color:white; border:none; border-radius:6px;
+  font-size:13px; font-weight:bold; padding:0 16px; min-height:34px; }
+QPushButton#btnAjouterCommande:hover, QPushButton#btnEnregistrerCommande:hover, QPushButton#btnExporterCommande:hover { background-color:#1F6F67; }
+QPushButton#btnFrequenceCommande, QPushButton#btnPrevisionCommande {
+  background-color:white; color:#2A8C82; border:1px solid #2A8C82; border-radius:6px;
+  font-size:13px; font-weight:bold; padding:0 16px; min-height:34px; }
+QPushButton#btnFrequenceCommande:hover, QPushButton#btnPrevisionCommande:hover { background-color:#E6F2F1; }
+QPushButton#btnFrequenceCommande:pressed, QPushButton#btnPrevisionCommande:pressed { background-color:#CDE9E7; }
+
+QTableWidget {
+  background-color:white; border:1px solid #E5E7EB; border-radius:10px; outline:0;
+  selection-background-color:#E6F2F1; selection-color:#1E3A3A; font-size:13px; }
+QTableWidget::item { padding-left:8px; border-bottom:1px solid #EEF2F6; }
+QTableWidget::item:selected { background-color:#E6F2F1; color:#1E3A3A; }
+QHeaderView::section {
+  background-color:#F8FAFC; color:#374151; border:none; border-bottom:1px solid #E5E7EB;
+  padding:8px; font-size:12px; font-weight:bold; }
+
+QFrame#frameAjoutCommande, QFrame#frameDetailsCommande, QFrame#frameFreqCommande, QFrame#framePrevCommande {
+  background-color:white; border:1px solid #E5E7EB; border-radius:10px; }
+QWidget#corpsAjoutCommande, QWidget#corpsDetailsCommande, QWidget#corpsFreqCommande, QWidget#corpsPrevCommande { background:transparent; }
+QLabel#lblTitreAjoutCommande, QLabel#lblTitreDetailsCommande, QLabel#lblTitreFreqCommande, QLabel#lblTitrePrevCommande {
+  background-color:#2A8C82; color:white; font-size:13px; font-weight:bold; padding-left:12px;
+  min-height:34px; max-height:34px; border-top-left-radius:9px; border-top-right-radius:9px; }
+QLabel#lblCleIdCommande, QLabel#lblCleDateCmdCommande, QLabel#lblCleDateLivCommande, QLabel#lblCleStatutCommande, QLabel#lblCleMontantCommande { color:#6B7280; }
+QLabel#lblValIdCommande, QLabel#lblValDateCmdCommande, QLabel#lblValDateLivCommande, QLabel#lblValStatutCommande, QLabel#lblValMontantCommande { color:#111827; font-weight:bold; }
+QLabel#lblGraphFreqCommande, QLabel#lblGraphPrevCommande { background-color:#F4F8F8; color:#9CA3AF; border-radius:8px; }
+</string>
+       </property>
+       <layout class="QVBoxLayout" name="layout_pageCommandes">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QStackedWidget" name="stackCommandes">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="pageGestionCommandes">
+           <layout class="QVBoxLayout" name="layout_gestionCommandes" stretch="0,0,1,0">
+            <property name="leftMargin">
+             <number>24</number>
+            </property>
+            <property name="topMargin">
+             <number>20</number>
+            </property>
+            <property name="rightMargin">
+             <number>24</number>
+            </property>
+            <property name="bottomMargin">
+             <number>20</number>
+            </property>
+            <property name="spacing">
+             <number>14</number>
+            </property>
+            <item>
+             <layout class="QVBoxLayout" name="layoutTitreCommande">
+              <property name="spacing">
+               <number>2</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="lblTitreCommande">
+                <property name="text">
+                 <string>Gestion des commandes</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblSousTitreCommande">
+                <property name="text">
+                 <string>Suivez vos commandes et gardez votre stock à jour.</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="layoutBarreCommande">
+              <property name="spacing">
+               <number>10</number>
+              </property>
+              <item>
+               <widget class="QLineEdit" name="txtRechercheCommande">
+                <property name="placeholderText">
+                 <string>Rechercher une commande...</string>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>220</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblStatutCommande">
+                <property name="text">
+                 <string>Statut :</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboStatutCommande">
+                <item>
+                 <property name="text">
+                  <string>Tous</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Commandée</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Livrée</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>En retard</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Annulée</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblTriCommande">
+                <property name="text">
+                 <string>Trier par :</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboTriCommande">
+                <item>
+                 <property name="text">
+                  <string>Date de commande</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Date de livraison</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Montant</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Numéro</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="spacerBarreCommande">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnAjouterCommande">
+                <property name="text">
+                 <string>+ Nouvelle commande</string>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnFrequenceCommande">
+                <property name="text">
+                 <string>Fréquence</string>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnPrevisionCommande">
+                <property name="text">
+                 <string>Prévision</string>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="layoutCentreCommande" stretch="3,1">
+              <property name="spacing">
+               <number>14</number>
+              </property>
+              <item>
+               <widget class="QTableWidget" name="tblCommandes">
+                <property name="editTriggers">
+                 <enum>QAbstractItemView::NoEditTriggers</enum>
+                </property>
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::SingleSelection</enum>
+                </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
+                </property>
+                <property name="showGrid">
+                 <bool>false</bool>
+                </property>
+                <property name="horizontalScrollBarPolicy">
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <column>
+                 <property name="text">
+                  <string>ID</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Date commande</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Date livraison</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Statut</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Actions</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frameAjoutCommande">
+                <property name="minimumSize">
+                 <size>
+                  <width>240</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <layout class="QVBoxLayout" name="layout_frameAjoutCommande">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblTitreAjoutCommande">
+                   <property name="text">
+                    <string>Ajouter une commande</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="corpsAjoutCommande">
+                   <layout class="QVBoxLayout" name="layoutCorpsAjoutCommande">
+                    <property name="leftMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="spacing">
+                     <number>10</number>
+                    </property>
+                    <item>
+                     <widget class="QLineEdit" name="txtDateCmdCommande">
+                      <property name="placeholderText">
+                       <string>Date de commande (jj/mm/aaaa)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="txtDateLivCommande">
+                      <property name="placeholderText">
+                       <string>Date de livraison (jj/mm/aaaa)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="txtFournisseurCommande">
+                      <property name="placeholderText">
+                       <string>Fournisseur</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="txtQuantiteCommande">
+                      <property name="placeholderText">
+                       <string>Quantité</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="spacerAjoutCommande">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="btnEnregistrerCommande">
+                      <property name="text">
+                       <string>Enregistrer</string>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="layoutBasCommande" stretch="3,2,2">
+              <property name="spacing">
+               <number>14</number>
+              </property>
+              <item>
+               <widget class="QFrame" name="frameDetailsCommande">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>200</height>
+                 </size>
+                </property>
+                <layout class="QVBoxLayout" name="layout_frameDetailsCommande">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblTitreDetailsCommande">
+                   <property name="text">
+                    <string>Détails d'une commande</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="corpsDetailsCommande">
+                   <layout class="QVBoxLayout" name="layoutCorpsDetailsCommande">
+                    <property name="leftMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="spacing">
+                     <number>8</number>
+                    </property>
+                    <item>
+                     <layout class="QGridLayout" name="gridDetailsCommande">
+                      <property name="spacing">
+                       <number>8</number>
+                      </property>
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="lblCleIdCommande">
+                        <property name="text">
+                         <string>ID</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QLabel" name="lblValIdCommande">
+                        <property name="text">
+                         <string>—</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QLabel" name="lblCleDateCmdCommande">
+                        <property name="text">
+                         <string>Date de commande</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QLabel" name="lblValDateCmdCommande">
+                        <property name="text">
+                         <string>—</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="0">
+                       <widget class="QLabel" name="lblCleDateLivCommande">
+                        <property name="text">
+                         <string>Date de livraison</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="1">
+                       <widget class="QLabel" name="lblValDateLivCommande">
+                        <property name="text">
+                         <string>—</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="3" column="0">
+                       <widget class="QLabel" name="lblCleStatutCommande">
+                        <property name="text">
+                         <string>Statut</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="3" column="1">
+                       <widget class="QLabel" name="lblValStatutCommande">
+                        <property name="text">
+                         <string>—</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="4" column="0">
+                       <widget class="QLabel" name="lblCleMontantCommande">
+                        <property name="text">
+                         <string>Montant total</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="4" column="1">
+                       <widget class="QLabel" name="lblValMontantCommande">
+                        <property name="text">
+                         <string>—</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <spacer name="spacerDetailsCommande">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="btnExporterCommande">
+                      <property name="text">
+                       <string>Exporter</string>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frameFreqCommande">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>200</height>
+                 </size>
+                </property>
+                <layout class="QVBoxLayout" name="layout_frameFreqCommande">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblTitreFreqCommande">
+                   <property name="text">
+                    <string>Fréquence</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="corpsFreqCommande">
+                   <layout class="QVBoxLayout" name="layoutCorpsFreqCommande">
+                    <property name="leftMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>10</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>12</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lblGraphFreqCommande">
+                      <property name="text">
+                       <string>Graphique</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>90</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="framePrevCommande">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>200</height>
+                 </size>
+                </property>
+                <layout class="QVBoxLayout" name="layout_framePrevCommande">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblTitrePrevCommande">
+                   <property name="text">
+                    <string>Prévision</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="corpsPrevCommande">
+                   <layout class="QVBoxLayout" name="layoutCorpsPrevCommande">
+                    <property name="leftMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>10</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>12</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>12</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lblGraphPrevCommande">
+                      <property name="text">
+                       <string>Graphique</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>90</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
