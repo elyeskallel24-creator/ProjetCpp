@@ -1,4 +1,4 @@
-QT += widgets sql charts printsupport svg
+QT += widgets sql charts printsupport svg network
 CONFIG += c++17
 
 # Accents et emojis du code bien lus avec le compilateur MSVC
@@ -10,6 +10,7 @@ SOURCES += \
     employespage.cpp \
     langue.cpp \
     dialogsauth.cpp \
+    smtpclient.cpp \
     connexionpage.cpp \
     authmanager.cpp \
     accueilpage.cpp \
@@ -33,6 +34,8 @@ HEADERS += \
     employespage.h \
     langue.h \
     dialogsauth.h \
+    smtpclient.h \
+    smtpconfig.h \
     connexionpage.h \
     authmanager.h \
     accueilpage.h \

@@ -14,6 +14,11 @@ public:
     static QString emoji(const QString &id);                // avatar de l'utilisateur
     static QString role(const QString &id);                 // rôle (traduit)
 
+    // Adresse e-mail du compte (utilisée pour "mot de passe oublié")
+    static QString email(const QString &id);
+    static void definirEmail(const QString &id, const QString &adresse);
+    static QString utilisateurParEmail(const QString &adresse);  // "" si aucun compte
+
     static QString normaliser(const QString &saisie);       // "  MaLek " -> "malek" ("" si inconnu)
     static bool verifier(const QString &saisie, const QString &motDePasse);
     static void definirMotDePasse(const QString &id, const QString &motDePasse);

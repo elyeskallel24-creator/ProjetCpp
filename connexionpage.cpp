@@ -3,10 +3,8 @@
 #include "dialogsauth.h"
 #include "langue.h"
 
-#include <QCompleter>
 #include <QComboBox>
 #include <QFrame>
-#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -114,9 +112,6 @@ ConnexionPage::ConnexionPage(QWidget *parent) : QWidget(parent)
     lc->addWidget(labelUser);
     m_user = new QLineEdit;
     m_user->setFixedHeight(36);
-    auto *completeur = new QCompleter(AuthManager::utilisateurs(), this);
-    completeur->setCaseSensitivity(Qt::CaseInsensitive);
-    m_user->setCompleter(completeur);
     lc->addWidget(m_user);
     lc->addSpacing(4);
 
@@ -159,30 +154,6 @@ ConnexionPage::ConnexionPage(QWidget *parent) : QWidget(parent)
     m_btnConnexion->setDefault(true);
     lier(m_btnConnexion, "login_bouton");
     lc->addWidget(m_btnConnexion);
-    lc->addSpacing(12);
-
-    auto *labelProfils = new QLabel;
-    labelProfils->setObjectName("cnSep");
-    lier(labelProfils, "login_profils");
-    lc->addWidget(labelProfils);
-
-    // Les 6 profils (un clic remplit le nom d'utilisateur)
-    auto *grille = new QGridLayout;
-    grille->setSpacing(8);
-    const QStringList utilisateurs = AuthManager::utilisateurs();
-    for (int i = 0; i < utilisateurs.size(); ++i) {
-        const QString id = utilisateurs[i];
-        auto *b = new QPushButton(AuthManager::emoji(id) + "  " + AuthManager::nomAffiche(id));
-        b->setObjectName("cnProfil");
-        b->setCursor(Qt::PointingHandCursor);
-        connect(b, &QPushButton::clicked, this, [this, id]() {
-            m_user->setText(id);
-            m_pass->setFocus();
-            masquerErreur();
-        });
-        grille->addWidget(b, i / 3, i % 3);
-    }
-    lc->addLayout(grille);
 
     ld->addWidget(carte, 0, Qt::AlignHCenter);
     ld->addStretch();
@@ -229,9 +200,6 @@ QPushButton#cnLien:hover { color:#1E635B; text-decoration:underline; }
 QPushButton#cnVoir { background:#FFFFFF; border:1px solid #DADDDC; border-radius:6px;
                      min-width:38px; max-width:38px; min-height:34px; max-height:34px; font-size:14px; }
 QPushButton#cnVoir:checked { background:#E6F2F1; border:1px solid #2A8C82; }
-QPushButton#cnProfil { background:#F4F8F8; border:1px solid #E3E8E7; border-radius:10px;
-                       padding:8px 4px; font-size:13px; font-weight:bold; color:#2D3436; }
-QPushButton#cnProfil:hover { background:#E6F2F1; border:1px solid #2A8C82; }
 )");
 
     retraduire();
@@ -260,12 +228,9 @@ void ConnexionPage::reinitialiser()
     m_essais = 0;
     masquerErreur();
 
-    const QString dernier = AuthManager::dernierUtilisateur();
-    m_user->setText(dernier);
-    if (dernier.isEmpty())
-        m_user->setFocus();
-    else
-        m_pass->setFocus();
+    // Aucun nom d'utilisateur n'est affiché ni pré-rempli : chacun saisit le sien
+    m_user->clear();
+    m_user->setFocus();
 }
 
 void ConnexionPage::afficherErreur(const QString &texte)

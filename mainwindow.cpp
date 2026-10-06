@@ -2638,9 +2638,12 @@ void MainWindow::configurerAccueilEtParametres()
     synchroniserMenu(ui->SWPetManager->currentIndex());
 }
 
-// Tant que personne n'est connecté, seul le bouton Accueil (= connexion) est utilisable
+// Tant que personne n'est connecté, le menu latéral est caché (seul l'écran de connexion est visible)
 void MainWindow::verrouillerMenu(bool verrouille)
 {
+    if (ui->frame_sidebar)
+        ui->frame_sidebar->setVisible(!verrouille);
+
     const QList<QPushButton *> aVerrouiller = { ui->btn_menu_animaux, ui->btn_menu_rdv, ui->btn_menu_stock,
                                                 ui->btn_menu_commandes, ui->btn_menu_fournisseurs,
                                                 ui->btn_menu_employes, ui->btn_menu_parametres };

@@ -18,7 +18,7 @@ class ConnexionPage : public QWidget
 public:
     explicit ConnexionPage(QWidget *parent = nullptr);
 
-    void reinitialiser();       // vide le mot de passe, pré-remplit le dernier utilisateur
+    void reinitialiser();       // vide les champs du formulaire
 
 signals:
     void connexionReussie(const QString &utilisateur);

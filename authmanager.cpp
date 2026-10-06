@@ -11,15 +11,16 @@ struct Compte {
     const char *nom;
     const char *emoji;
     const char *roleCle;     // rôle d'affichage (cosmétique) : à modifier ici si besoin
+    const char *email;       // adresse qui reçoit le code "mot de passe oublié" : METTEZ VOS VRAIES ADRESSES
 };
 
 const Compte COMPTES[] = {
-    {"malek",  "Malek",  "🐶", "role_admin"},
-    {"chahed", "Chahed", "🐱", "role_stock"},
-    {"elyes",  "Elyes",  "🐰", "role_fourn"},
-    {"nessma", "Nessma", "🦊", "role_vet"},
-    {"wissal", "Wissal", "🐹", "role_accueil"},
-    {"iyed",   "Iyed",   "🐢", "role_vet"},
+    {"malek",  "Malek",  "🐶", "role_admin", "malek@petmanager.tn"},
+    {"chahed", "Chahed", "🐱", "role_stock", "chahed@petmanager.tn"},
+    {"elyes",  "Elyes",  "🐰", "role_fourn", "elyes@petmanager.tn"},
+    {"nessma", "Nessma", "🦊", "role_vet", "nessma@petmanager.tn"},
+    {"wissal", "Wissal", "🐹", "role_accueil", "wissal@petmanager.tn"},
+    {"iyed",   "Iyed",   "🐢", "role_vet", "iyed@petmanager.tn"},
 };
 
 const char *MOT_DE_PASSE_PAR_DEFAUT = "0000";
@@ -66,6 +67,37 @@ QString AuthManager::role(const QString &id)
 {
     const Compte *c = trouver(id);
     return c ? Langue::t(c->roleCle) : QString();
+}
+
+QString AuthManager::email(const QString &id)
+{
+    const Compte *c = trouver(id);
+    if (!c)
+        return QString();
+    QSettings s("PetManager", "PetManager");
+    return s.value("auth/email_" + id, QString::fromUtf8(c->email)).toString();
+}
+
+void AuthManager::definirEmail(const QString &id, const QString &adresse)
+{
+    if (!trouver(id))
+        return;
+    QSettings s("PetManager", "PetManager");
+    s.setValue("auth/email_" + id, adresse.trimmed().toLower());
+    s.sync();
+}
+
+QString AuthManager::utilisateurParEmail(const QString &adresse)
+{
+    const QString cherche = adresse.trimmed().toLower();
+    if (cherche.isEmpty())
+        return QString();
+    for (const Compte &c : COMPTES) {
+        const QString id = QString::fromLatin1(c.id);
+        if (email(id).trimmed().toLower() == cherche)
+            return id;
+    }
+    return QString();
 }
 
 QString AuthManager::normaliser(const QString &saisie)

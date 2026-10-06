@@ -7,7 +7,7 @@ class QWidget;
 
 namespace DialogsAuth {
 
-// Choix du compte, "envoi" d'un code de vérification (simulé), puis nouveau mot de passe
+// E-mail du compte -> code de vérification envoyé par e-mail -> nouveau mot de passe
 void motDePasseOublie(QWidget *parent);
 
 // Demande l'ancien mot de passe, puis le nouveau (utilisateur déjà connecté)

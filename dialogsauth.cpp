@@ -2,14 +2,20 @@
 #include "authmanager.h"
 #include "customdialog.h"
 #include "langue.h"
+#include "smtpclient.h"
 
-#include <QComboBox>
+#include <QApplication>
+#include <QCheckBox>
+#include <QDateTime>
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRandomGenerator>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
+#include <QStackedWidget>
 #include <QVBoxLayout>
 
 namespace {
@@ -27,6 +33,10 @@ QPushButton#dlgPrincipal:hover { background:#23766D; }
 QPushButton#dlgSecondaire { background:#FFFFFF; color:#2A8C82; border:1.5px solid #2A8C82; border-radius:8px;
                             min-height:34px; padding:0 16px; font-size:13px; font-weight:bold; }
 QPushButton#dlgSecondaire:hover { background:#E6F2F1; }
+QPushButton#dlgLien { background:transparent; border:none; color:#2A8C82; font-size:12px;
+                      font-weight:bold; padding:2px 0; }
+QPushButton#dlgLien:hover { color:#1E635B; text-decoration:underline; }
+QPushButton#dlgLien:disabled { color:#B7CFCB; }
 )";
 
 QLabel *creerLabel(const QString &texte, const char *nom)
@@ -57,13 +67,16 @@ QPushButton *creerBouton(const QString &texte, const char *nom)
 
 // =====================================================================
 //                         Mot de passe oublié
+//   Étape 1 : saisie de l'e-mail -> envoi d'un code à 6 chiffres
+//   Étape 2 : saisie du code reçu (valable 10 min, 3 essais)
+//   Étape 3 : nouveau mot de passe
 // =====================================================================
 void DialogsAuth::motDePasseOublie(QWidget *parent)
 {
     QDialog d(parent);
     d.setWindowTitle(Langue::t("oubli_titre"));
     d.setModal(true);
-    d.setMinimumWidth(430);
+    d.setMinimumWidth(440);
     d.setLayoutDirection(Langue::direction());
     d.setStyleSheet(STYLE_DIALOGUE);
 
@@ -72,68 +85,194 @@ void DialogsAuth::motDePasseOublie(QWidget *parent)
     lay->setSpacing(8);
 
     lay->addWidget(creerLabel(QString::fromUtf8("🔑  ") + Langue::t("oubli_titre"), "dlgTitre"));
-    lay->addWidget(creerLabel(Langue::t("oubli_sous"), "dlgTexte"));
-    lay->addSpacing(4);
 
-    // Choix du compte + envoi du code
-    lay->addWidget(creerLabel(Langue::t("login_user"), "dlgLabel"));
-    auto *rangeeCompte = new QHBoxLayout;
-    auto *choixCompte = new QComboBox;
-    choixCompte->setFixedHeight(34);
-    for (const QString &id : AuthManager::utilisateurs())
-        choixCompte->addItem(AuthManager::emoji(id) + "  " + AuthManager::nomAffiche(id), id);
-    auto *btnEnvoyer = creerBouton(Langue::t("oubli_envoyer"), "dlgSecondaire");
-    rangeeCompte->addWidget(choixCompte, 1);
-    rangeeCompte->addWidget(btnEnvoyer);
-    lay->addLayout(rangeeCompte);
+    auto *pages = new QStackedWidget;
+    lay->addWidget(pages);
 
+    // ------------------------------------------------ étape 1 : e-mail
+    auto *page1 = new QWidget;
+    auto *l1 = new QVBoxLayout(page1);
+    l1->setContentsMargins(0, 0, 0, 0);
+    l1->setSpacing(8);
+    l1->addWidget(creerLabel(Langue::t("oubli_sous"), "dlgTexte"));
+    l1->addSpacing(4);
+    l1->addWidget(creerLabel(Langue::t("oubli_email"), "dlgLabel"));
+    auto *champEmail = new QLineEdit;
+    champEmail->setFixedHeight(34);
+    champEmail->setPlaceholderText(Langue::t("oubli_email_ph"));
+    l1->addWidget(champEmail);
+    l1->addStretch();
+    auto *b1 = new QHBoxLayout;
+    b1->addStretch();
+    auto *btnAnnuler1 = creerBouton(Langue::t("btn_annuler"), "dlgSecondaire");
+    auto *btnEnvoyer = creerBouton(Langue::t("oubli_envoyer"), "dlgPrincipal");
+    b1->addWidget(btnAnnuler1);
+    b1->addWidget(btnEnvoyer);
+    l1->addLayout(b1);
+    pages->addWidget(page1);
+
+    // ------------------------------------------------ étape 2 : code
+    auto *page2 = new QWidget;
+    auto *l2 = new QVBoxLayout(page2);
+    l2->setContentsMargins(0, 0, 0, 0);
+    l2->setSpacing(8);
     auto *infoCode = creerLabel(QString(), "dlgCode");
-    infoCode->hide();
-    lay->addWidget(infoCode);
-
-    // Code + nouveau mot de passe
-    lay->addWidget(creerLabel(Langue::t("oubli_code"), "dlgLabel"));
+    l2->addWidget(infoCode);
+    l2->addWidget(creerLabel(Langue::t("oubli_etape_code"), "dlgTexte"));
+    l2->addWidget(creerLabel(Langue::t("oubli_code"), "dlgLabel"));
     auto *champCode = new QLineEdit;
-    champCode->setMaxLength(4);
-    champCode->setFixedHeight(34);
-    lay->addWidget(champCode);
+    champCode->setMaxLength(6);
+    champCode->setFixedHeight(38);
+    champCode->setAlignment(Qt::AlignCenter);
+    champCode->setPlaceholderText("______");
+    champCode->setValidator(new QRegularExpressionValidator(QRegularExpression("\\d{0,6}"), champCode));
+    champCode->setStyleSheet("font-size:18px; font-weight:bold; letter-spacing:6px;");
+    l2->addWidget(champCode);
+    auto *rangeeLiens = new QHBoxLayout;
+    auto *btnRetour = creerBouton(Langue::t("oubli_retour"), "dlgLien");
+    auto *btnRenvoyer = creerBouton(Langue::t("oubli_renvoyer"), "dlgLien");
+    rangeeLiens->addWidget(btnRetour);
+    rangeeLiens->addStretch();
+    rangeeLiens->addWidget(btnRenvoyer);
+    l2->addLayout(rangeeLiens);
+    l2->addStretch();
+    auto *b2 = new QHBoxLayout;
+    b2->addStretch();
+    auto *btnAnnuler2 = creerBouton(Langue::t("btn_annuler"), "dlgSecondaire");
+    auto *btnVerifier = creerBouton(Langue::t("oubli_verifier"), "dlgPrincipal");
+    b2->addWidget(btnAnnuler2);
+    b2->addWidget(btnVerifier);
+    l2->addLayout(b2);
+    pages->addWidget(page2);
 
-    lay->addWidget(creerLabel(Langue::t("oubli_nouveau"), "dlgLabel"));
+    // ------------------------------------------------ étape 3 : nouveau mot de passe
+    auto *page3 = new QWidget;
+    auto *l3 = new QVBoxLayout(page3);
+    l3->setContentsMargins(0, 0, 0, 0);
+    l3->setSpacing(8);
+    l3->addWidget(creerLabel(Langue::t("oubli_etape_mdp"), "dlgCode"));
+    l3->addWidget(creerLabel(Langue::t("oubli_nouveau"), "dlgLabel"));
     auto *champNouveau = creerChampMotDePasse();
-    lay->addWidget(champNouveau);
-
-    lay->addWidget(creerLabel(Langue::t("oubli_confirmer"), "dlgLabel"));
+    l3->addWidget(champNouveau);
+    l3->addWidget(creerLabel(Langue::t("oubli_confirmer"), "dlgLabel"));
     auto *champConfirmer = creerChampMotDePasse();
-    lay->addWidget(champConfirmer);
+    l3->addWidget(champConfirmer);
+    auto *voir = new QCheckBox(Langue::t("login_voir"));
+    l3->addWidget(voir);
+    l3->addStretch();
+    auto *b3 = new QHBoxLayout;
+    b3->addStretch();
+    auto *btnAnnuler3 = creerBouton(Langue::t("btn_annuler"), "dlgSecondaire");
+    auto *btnChanger = creerBouton(Langue::t("oubli_changer"), "dlgPrincipal");
+    b3->addWidget(btnAnnuler3);
+    b3->addWidget(btnChanger);
+    l3->addLayout(b3);
+    pages->addWidget(page3);
 
-    lay->addSpacing(6);
-    auto *boutons = new QHBoxLayout;
-    boutons->addStretch();
-    auto *btnAnnuler = creerBouton(Langue::t("btn_annuler"), "dlgSecondaire");
-    auto *btnValider = creerBouton(Langue::t("oubli_valider"), "dlgPrincipal");
-    boutons->addWidget(btnAnnuler);
-    boutons->addWidget(btnValider);
-    lay->addLayout(boutons);
-
+    // ------------------------------------------------ état
+    QString compte;              // identifiant du compte trouvé grâce à l'e-mail
     QString codeAttendu;
+    QDateTime expiration;
+    int essais = 0;
 
-    QObject::connect(btnEnvoyer, &QPushButton::clicked, &d, [&]() {
-        codeAttendu = QString::number(QRandomGenerator::global()->bounded(1000, 10000));
-        infoCode->setText(Langue::t("oubli_code_envoye").arg(codeAttendu));
-        infoCode->show();
+    // Génère un code, l'envoie par e-mail (ou l'affiche en mode démo) puis passe à l'étape 2
+    auto envoyerCode = [&]() {
+        const QString adresse = champEmail->text().trimmed().toLower();
+        const QRegularExpression formatEmail("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
+        if (!formatEmail.match(adresse).hasMatch()) {
+            CustomDialog::error(&d, Langue::t("titre_erreur"), Langue::t("oubli_err_email"));
+            champEmail->setFocus();
+            return;
+        }
+        const QString id = AuthManager::utilisateurParEmail(adresse);
+        if (id.isEmpty()) {
+            CustomDialog::error(&d, Langue::t("titre_erreur"), Langue::t("oubli_email_inconnu"));
+            champEmail->setFocus();
+            return;
+        }
+
+        const QString code = QString::number(QRandomGenerator::global()->bounded(100000, 1000000));
+
+        if (SmtpClient::estConfigure()) {
+            const QString texteBouton = btnEnvoyer->text();
+            btnEnvoyer->setEnabled(false);
+            btnRenvoyer->setEnabled(false);
+            btnEnvoyer->setText(Langue::t("oubli_envoi_cours"));
+            QApplication::setOverrideCursor(Qt::WaitCursor);
+            QApplication::processEvents();
+
+            QString erreur;
+            const bool ok = SmtpClient::envoyer(adresse, Langue::t("mail_sujet"),
+                                                Langue::t("mail_corps").arg(code), &erreur);
+
+            QApplication::restoreOverrideCursor();
+            btnEnvoyer->setText(texteBouton);
+            btnEnvoyer->setEnabled(true);
+            btnRenvoyer->setEnabled(true);
+            if (!ok) {
+                CustomDialog::error(&d, Langue::t("titre_erreur"), Langue::t("oubli_err_envoi").arg(erreur));
+                return;
+            }
+            infoCode->setText(Langue::t("oubli_code_envoye_mail").arg(adresse));
+        } else {
+            infoCode->setText(Langue::t("oubli_code_envoye").arg(code));   // mode démo
+        }
+
+        compte = id;
+        codeAttendu = code;
+        expiration = QDateTime::currentDateTime().addSecs(10 * 60);
+        essais = 0;
+        champCode->clear();
+        pages->setCurrentWidget(page2);
         champCode->setFocus();
+    };
+
+    QObject::connect(btnEnvoyer, &QPushButton::clicked, &d, envoyerCode);
+    QObject::connect(champEmail, &QLineEdit::returnPressed, &d, envoyerCode);
+    QObject::connect(btnRenvoyer, &QPushButton::clicked, &d, envoyerCode);
+    QObject::connect(btnRetour, &QPushButton::clicked, &d, [&]() {
+        codeAttendu.clear();
+        pages->setCurrentWidget(page1);
+        champEmail->setFocus();
+        champEmail->selectAll();
     });
-    QObject::connect(btnAnnuler, &QPushButton::clicked, &d, &QDialog::reject);
-    QObject::connect(btnValider, &QPushButton::clicked, &d, [&]() {
+
+    auto verifierCode = [&]() {
         const QString titreErreur = Langue::t("titre_erreur");
-        if (codeAttendu.isEmpty()) {
-            CustomDialog::error(&d, titreErreur, Langue::t("oubli_pas_code"));
+        if (codeAttendu.isEmpty() || QDateTime::currentDateTime() > expiration) {
+            codeAttendu.clear();
+            CustomDialog::error(&d, titreErreur, Langue::t("oubli_code_expire"));
             return;
         }
         if (champCode->text().trimmed() != codeAttendu) {
-            CustomDialog::error(&d, titreErreur, Langue::t("oubli_err_code"));
+            ++essais;
+            champCode->clear();
+            champCode->setFocus();
+            if (essais >= 3) {
+                codeAttendu.clear();
+                CustomDialog::error(&d, titreErreur, Langue::t("oubli_trop_essais"));
+                pages->setCurrentWidget(page1);
+            } else {
+                CustomDialog::error(&d, titreErreur,
+                                    Langue::t("oubli_err_code") + "\n" + Langue::t("login_restant").arg(3 - essais));
+            }
             return;
         }
+        codeAttendu.clear();                  // un code ne sert qu'une fois
+        pages->setCurrentWidget(page3);
+        champNouveau->setFocus();
+    };
+    QObject::connect(btnVerifier, &QPushButton::clicked, &d, verifierCode);
+    QObject::connect(champCode, &QLineEdit::returnPressed, &d, verifierCode);
+
+    QObject::connect(voir, &QCheckBox::toggled, &d, [&](bool visible) {
+        const auto mode = visible ? QLineEdit::Normal : QLineEdit::Password;
+        champNouveau->setEchoMode(mode);
+        champConfirmer->setEchoMode(mode);
+    });
+
+    auto changer = [&]() {
+        const QString titreErreur = Langue::t("titre_erreur");
         if (champNouveau->text().size() < 4) {
             CustomDialog::error(&d, titreErreur, Langue::t("oubli_err_court"));
             return;
@@ -142,11 +281,18 @@ void DialogsAuth::motDePasseOublie(QWidget *parent)
             CustomDialog::error(&d, titreErreur, Langue::t("oubli_err_diff"));
             return;
         }
-        AuthManager::definirMotDePasse(choixCompte->currentData().toString(), champNouveau->text());
+        AuthManager::definirMotDePasse(compte, champNouveau->text());
         CustomDialog::success(&d, Langue::t("titre_succes"), Langue::t("oubli_ok"));
         d.accept();
-    });
+    };
+    QObject::connect(btnChanger, &QPushButton::clicked, &d, changer);
+    QObject::connect(champConfirmer, &QLineEdit::returnPressed, &d, changer);
 
+    for (QPushButton *b : { btnAnnuler1, btnAnnuler2, btnAnnuler3 })
+        QObject::connect(b, &QPushButton::clicked, &d, &QDialog::reject);
+
+    pages->setCurrentWidget(page1);
+    champEmail->setFocus();
     d.exec();
 }
 
