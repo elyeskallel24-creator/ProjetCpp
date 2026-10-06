@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/commandes">
+        <file>images_commandes/graph_frequence.png</file>
+        <file>images_commandes/graph_prevision.png</file>
+    </qresource>
+</RCC>

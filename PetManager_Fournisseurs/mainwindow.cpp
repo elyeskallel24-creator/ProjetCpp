@@ -221,6 +221,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Module Stock (intégration)
     initialiserModuleStock();
+
+    // Module Commandes (intégration)
+    initialiserModuleCommandes();
+
+    // Module Rendez-vous (intégration)
+    initialiserModuleRendezVous();
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -2522,4 +2528,359 @@ void MainWindow::on_btn_menu_fournisseurs_clicked()
 void MainWindow::on_btn_menu_stock_clicked()
 {
     changerPageStock(PAGE_STOCK);
+}
+
+// =====================================================================
+// ===== MODULE COMMANDES ==============================================
+// =====================================================================
+
+void MainWindow::initialiserModuleCommandes()
+{
+    configurerTableauCommandes();
+    chargerExempleCommandes();
+    rafraichirTableauCommandes();
+    afficherFrequenceCommandes();   // graphiques affichés dès l'ouverture
+    afficherPrevisionCommandes();
+
+    connect(ui->btnFrequenceCommande, &QPushButton::clicked, this, &MainWindow::afficherFrequenceCommandes);
+    connect(ui->btnPrevisionCommande, &QPushButton::clicked, this, &MainWindow::afficherPrevisionCommandes);
+    connect(ui->btnAjouterCommande,   &QPushButton::clicked, this, &MainWindow::nouvelleCommandeListe);
+    connect(ui->btnEnregistrerCommande, &QPushButton::clicked, this, &MainWindow::enregistrerCommandeListe);
+    connect(ui->btnExporterCommande,  &QPushButton::clicked, this, &MainWindow::exporterCommandesListe);
+
+    connect(ui->txtRechercheCommande, &QLineEdit::textChanged, this, [this](const QString &) { rafraichirTableauCommandes(); });
+    connect(ui->comboStatutCommande, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int) { rafraichirTableauCommandes(); });
+    connect(ui->comboTriCommande,    QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int) { rafraichirTableauCommandes(); });
+    connect(ui->tblCommandes, &QTableWidget::itemSelectionChanged, this, &MainWindow::afficherDetailsCommandes);
+}
+
+// Bouton « Commandes » du menu latéral
+void MainWindow::on_btn_menu_commandes_clicked()
+{
+    ui->SWPetManager->setCurrentWidget(ui->pageCommandes);
+    ui->stackCommandes->setCurrentIndex(0);   // premier écran du module
+}
+
+void MainWindow::configurerTableauCommandes()
+{
+    QTableWidget *t = ui->tblCommandes;
+    QHeaderView *h = t->horizontalHeader();
+    h->setStretchLastSection(false);
+    h->setMinimumSectionSize(60);
+    h->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    h->setSectionResizeMode(1, QHeaderView::Stretch);
+    h->setSectionResizeMode(2, QHeaderView::Stretch);
+    h->setSectionResizeMode(3, QHeaderView::Fixed);
+    h->setSectionResizeMode(4, QHeaderView::Fixed);
+    t->setColumnWidth(3, 140);
+    t->setColumnWidth(4, 90);
+    t->verticalHeader()->setVisible(false);
+    t->verticalHeader()->setDefaultSectionSize(46);
+}
+
+// Données d'exemple (à remplacer plus tard par la base de données)
+void MainWindow::chargerExempleCommandes()
+{
+    auto ajouter = [this](const QDate &dc, const QDate &dl, const QString &statut,
+                          const QString &fournisseur, int qte, double montant) {
+        CommandeListe c;
+        c.id = m_prochainIdCommande++;
+        c.dateCommande = dc;
+        c.dateLivraison = dl;
+        c.statut = statut;
+        c.fournisseur = fournisseur;
+        c.quantite = qte;
+        c.montant = montant;
+        m_commandesListe.append(c);
+    };
+
+    ajouter(QDate(2026, 10, 3),  QDate(2026, 10, 6),  "Commandée", "Pharma Vet",       40,  480.0);
+    ajouter(QDate(2026, 9, 28),  QDate(2026, 10, 2),  "Livrée",    "Croquettes Plus",  25, 1250.0);
+    ajouter(QDate(2026, 9, 25),  QDate(2026, 9, 30),  "En retard", "MediAnimal",       60,  890.5);
+    ajouter(QDate(2026, 9, 20),  QDate(2026, 9, 24),  "Livrée",    "Pharma Vet",       15,  320.0);
+    ajouter(QDate(2026, 9, 15),  QDate(),             "Annulée",   "Hygiène & Soins",  10,  150.0);
+    ajouter(QDate(2026, 10, 5),  QDate(2026, 10, 9),  "Commandée", "Croquettes Plus",  80, 2100.0);
+}
+
+QString MainWindow::texteIdCommande(int id) const
+{
+    return QString("C%1").arg(id, 3, 10, QChar('0'));
+}
+
+int MainWindow::indexCommandeParId(int id) const
+{
+    for (int i = 0; i < m_commandesListe.size(); ++i)
+        if (m_commandesListe[i].id == id) return i;
+    return -1;
+}
+
+int MainWindow::idCommandeSelectionnee() const
+{
+    const QModelIndexList lignes = ui->tblCommandes->selectionModel()->selectedRows();
+    if (lignes.isEmpty()) return -1;
+    QTableWidgetItem *it = ui->tblCommandes->item(lignes.first().row(), 0);
+    return it ? it->data(Qt::UserRole).toInt() : -1;
+}
+
+// Reconstruit le tableau selon la recherche, le statut et le tri choisis
+void MainWindow::rafraichirTableauCommandes()
+{
+    const int idSelectionne = idCommandeSelectionnee();
+    const QString filtre = ui->txtRechercheCommande->text().trimmed();
+    const QString statut = ui->comboStatutCommande->currentIndex() > 0
+                               ? ui->comboStatutCommande->currentText() : QString();
+
+    QVector<CommandeListe> liste;
+    for (const CommandeListe &c : m_commandesListe) {
+        if (!statut.isEmpty() && c.statut != statut) continue;
+        if (!filtre.isEmpty()) {
+            const QString texte = texteIdCommande(c.id) + " " + c.fournisseur + " " + c.statut;
+            if (!texte.contains(filtre, Qt::CaseInsensitive)) continue;
+        }
+        liste.append(c);
+    }
+
+    switch (ui->comboTriCommande->currentIndex()) {
+    case 0: std::sort(liste.begin(), liste.end(), [](const CommandeListe &a, const CommandeListe &b) { return a.dateCommande > b.dateCommande; }); break;
+    case 1: std::sort(liste.begin(), liste.end(), [](const CommandeListe &a, const CommandeListe &b) {
+                if (!a.dateLivraison.isValid()) return false;
+                if (!b.dateLivraison.isValid()) return true;
+                return a.dateLivraison < b.dateLivraison; }); break;
+    case 2: std::sort(liste.begin(), liste.end(), [](const CommandeListe &a, const CommandeListe &b) { return a.montant > b.montant; }); break;
+    default: std::sort(liste.begin(), liste.end(), [](const CommandeListe &a, const CommandeListe &b) { return a.id < b.id; }); break;
+    }
+
+    QTableWidget *t = ui->tblCommandes;
+    {
+        QSignalBlocker blocage(t);
+        t->setRowCount(0);
+        t->setRowCount(liste.size());
+        for (int r = 0; r < liste.size(); ++r) {
+            const CommandeListe &c = liste[r];
+
+            QTableWidgetItem *itId = new QTableWidgetItem(texteIdCommande(c.id));
+            itId->setData(Qt::UserRole, c.id);
+            t->setItem(r, 0, itId);
+            t->setItem(r, 1, new QTableWidgetItem(c.dateCommande.toString("dd/MM/yyyy")));
+            t->setItem(r, 2, new QTableWidgetItem(c.dateLivraison.isValid()
+                                                      ? c.dateLivraison.toString("dd/MM/yyyy") : QString::fromUtf8("—")));
+
+            QString fond = "#DBEAFE", texte = "#1D4ED8";           // Commandée
+            if (c.statut == "Livrée")         { fond = "#DCFCE7"; texte = "#15803D"; }
+            else if (c.statut == "En retard") { fond = "#FEF3C7"; texte = "#B45309"; }
+            else if (c.statut == "Annulée")   { fond = "#FEE2E2"; texte = "#B91C1C"; }
+            t->setCellWidget(r, 3, creerBadge(c.statut, fond, texte));
+            t->setCellWidget(r, 4, creerActionsCommandes(c.id));
+        }
+        if (idSelectionne >= 0) {
+            for (int r = 0; r < t->rowCount(); ++r) {
+                if (t->item(r, 0)->data(Qt::UserRole).toInt() == idSelectionne) { t->selectRow(r); break; }
+            }
+        }
+    }
+    afficherDetailsCommandes();
+}
+
+// Boutons Modifier / Supprimer d'une ligne (même principe que le module Stock)
+QWidget* MainWindow::creerActionsCommandes(int id)
+{
+    QWidget *w = new QWidget;
+    QHBoxLayout *lay = new QHBoxLayout(w);
+    lay->setContentsMargins(0, 0, 0, 0);
+    lay->setSpacing(4);
+
+    QPushButton *btnEdit  = new QPushButton;
+    QPushButton *btnSuppr = new QPushButton;
+    btnEdit->setObjectName("btnModifierCommande");
+    btnSuppr->setObjectName("btnSupprimerCommande");
+    btnEdit->setIcon(icone("pencil_teal"));
+    btnSuppr->setIcon(icone("trash_red"));
+    btnEdit->setToolTip("Modifier");
+    btnSuppr->setToolTip("Supprimer");
+
+    for (QPushButton *b : {btnEdit, btnSuppr}) {
+        b->setFixedSize(30, 30);
+        b->setIconSize(QSize(18, 18));
+        b->setCursor(Qt::PointingHandCursor);
+        b->setStyleSheet("QPushButton{border:none;background:transparent;}"
+                         "QPushButton:hover{background:#E6F2F1;border-radius:6px;}");
+        lay->addWidget(b);
+    }
+    lay->addStretch();
+
+    connect(btnEdit, &QPushButton::clicked, this, [this, id]() { modifierCommandeListe(id); });
+    // La suppression reconstruit le tableau : on la lance juste après le clic
+    connect(btnSuppr, &QPushButton::clicked, this, [this, id]() {
+        QTimer::singleShot(0, this, [this, id]() { supprimerCommandeListe(id); });
+    });
+    return w;
+}
+
+void MainWindow::afficherDetailsCommandes()
+{
+    const int index = indexCommandeParId(idCommandeSelectionnee());
+    const QString vide = QString::fromUtf8("—");
+    if (index < 0) {
+        ui->lblValIdCommande->setText(vide);
+        ui->lblValDateCmdCommande->setText(vide);
+        ui->lblValDateLivCommande->setText(vide);
+        ui->lblValStatutCommande->setText(vide);
+        ui->lblValMontantCommande->setText(vide);
+        return;
+    }
+    const CommandeListe &c = m_commandesListe[index];
+    ui->lblValIdCommande->setText(texteIdCommande(c.id));
+    ui->lblValDateCmdCommande->setText(c.dateCommande.toString("dd/MM/yyyy"));
+    ui->lblValDateLivCommande->setText(c.dateLivraison.isValid() ? c.dateLivraison.toString("dd/MM/yyyy") : vide);
+    ui->lblValStatutCommande->setText(c.statut);
+    ui->lblValMontantCommande->setText(c.montant > 0 ? QString::number(c.montant, 'f', 3) + " TND" : vide);
+}
+
+void MainWindow::viderFormulaireCommandes()
+{
+    m_idCommandeEnEdition = -1;
+    ui->txtDateCmdCommande->clear();
+    ui->txtDateLivCommande->clear();
+    ui->txtFournisseurCommande->clear();
+    ui->txtQuantiteCommande->clear();
+    ui->lblTitreAjoutCommande->setText("Ajouter une commande");
+    ui->btnEnregistrerCommande->setText("Enregistrer");
+}
+
+void MainWindow::nouvelleCommandeListe()
+{
+    viderFormulaireCommandes();
+    ui->txtDateCmdCommande->setText(QDate::currentDate().toString("dd/MM/yyyy"));
+    ui->txtDateLivCommande->setFocus();
+}
+
+void MainWindow::modifierCommandeListe(int id)
+{
+    const int index = indexCommandeParId(id);
+    if (index < 0) return;
+    const CommandeListe &c = m_commandesListe[index];
+    m_idCommandeEnEdition = id;
+    ui->txtDateCmdCommande->setText(c.dateCommande.toString("dd/MM/yyyy"));
+    ui->txtDateLivCommande->setText(c.dateLivraison.isValid() ? c.dateLivraison.toString("dd/MM/yyyy") : QString());
+    ui->txtFournisseurCommande->setText(c.fournisseur);
+    ui->txtQuantiteCommande->setText(QString::number(c.quantite));
+    ui->lblTitreAjoutCommande->setText("Modifier " + texteIdCommande(id));
+    ui->btnEnregistrerCommande->setText("Mettre à jour");
+    ui->txtDateLivCommande->setFocus();
+}
+
+void MainWindow::enregistrerCommandeListe()
+{
+    const QDate dateCmd = QDate::fromString(ui->txtDateCmdCommande->text().trimmed(), "dd/MM/yyyy");
+    const QString texteLiv = ui->txtDateLivCommande->text().trimmed();
+    const QDate dateLiv = QDate::fromString(texteLiv, "dd/MM/yyyy");
+    const QString fournisseur = ui->txtFournisseurCommande->text().trimmed();
+    bool quantiteOk = false;
+    const int quantite = ui->txtQuantiteCommande->text().trimmed().toInt(&quantiteOk);
+
+    QString erreur;
+    if (!dateCmd.isValid())                              erreur = "La date de commande est invalide (format jj/mm/aaaa).";
+    else if (!texteLiv.isEmpty() && !dateLiv.isValid())  erreur = "La date de livraison est invalide (format jj/mm/aaaa).";
+    else if (dateLiv.isValid() && dateLiv < dateCmd)     erreur = "La livraison ne peut pas précéder la commande.";
+    else if (fournisseur.isEmpty())                      erreur = "Le fournisseur est obligatoire.";
+    else if (!quantiteOk || quantite <= 0)               erreur = "La quantité doit être un nombre entier positif.";
+    if (!erreur.isEmpty()) {
+        showMessageBox("Commandes", erreur, QMessageBox::Warning);
+        return;
+    }
+
+    int idAffiche;
+    const int index = indexCommandeParId(m_idCommandeEnEdition);
+    if (index >= 0) {                              // modification
+        CommandeListe &c = m_commandesListe[index];
+        c.dateCommande = dateCmd;
+        c.dateLivraison = dateLiv;
+        c.fournisseur = fournisseur;
+        c.quantite = quantite;
+        idAffiche = c.id;
+    } else {                                       // nouvelle commande
+        CommandeListe c;
+        c.id = m_prochainIdCommande++;
+        c.dateCommande = dateCmd;
+        c.dateLivraison = dateLiv;
+        c.statut = "Commandée";
+        c.fournisseur = fournisseur;
+        c.quantite = quantite;
+        m_commandesListe.append(c);
+        idAffiche = c.id;
+    }
+    viderFormulaireCommandes();
+    ui->txtRechercheCommande->clear();
+    ui->comboStatutCommande->setCurrentIndex(0);
+    rafraichirTableauCommandes();
+
+    for (int r = 0; r < ui->tblCommandes->rowCount(); ++r) {   // sélectionne la ligne enregistrée
+        if (ui->tblCommandes->item(r, 0)->data(Qt::UserRole).toInt() == idAffiche) {
+            ui->tblCommandes->selectRow(r);
+            break;
+        }
+    }
+}
+
+void MainWindow::supprimerCommandeListe(int id)
+{
+    const int index = indexCommandeParId(id);
+    if (index < 0) return;
+    if (!showConfirmBox("Voulez-vous vraiment supprimer la commande " + texteIdCommande(id) + " ?"))
+        return;
+    m_commandesListe.removeAt(index);
+    if (m_idCommandeEnEdition == id) viderFormulaireCommandes();
+    rafraichirTableauCommandes();
+}
+
+// Export CSV des commandes affichées dans le tableau
+void MainWindow::exporterCommandesListe()
+{
+    const QString chemin = QFileDialog::getSaveFileName(this, "Exporter les commandes",
+                                                        "commandes.csv", "Fichier CSV (*.csv)");
+    if (chemin.isEmpty()) return;
+
+    QFile fichier(chemin);
+    if (!fichier.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        showMessageBox("Commandes", "Impossible d'écrire le fichier.", QMessageBox::Warning);
+        return;
+    }
+    QTextStream out(&fichier);
+    out.setEncoding(QStringConverter::Utf8);
+    out.setGenerateByteOrderMark(true);
+    out << "ID;Date commande;Date livraison;Statut;Fournisseur;Quantité;Montant (TND)\n";
+    for (int r = 0; r < ui->tblCommandes->rowCount(); ++r) {
+        const int index = indexCommandeParId(ui->tblCommandes->item(r, 0)->data(Qt::UserRole).toInt());
+        if (index < 0) continue;
+        const CommandeListe &c = m_commandesListe[index];
+        out << texteIdCommande(c.id) << ";" << c.dateCommande.toString("dd/MM/yyyy") << ";"
+            << (c.dateLivraison.isValid() ? c.dateLivraison.toString("dd/MM/yyyy") : QString()) << ";"
+            << c.statut << ";" << c.fournisseur << ";" << c.quantite << ";"
+            << QString::number(c.montant, 'f', 3) << "\n";
+    }
+    showMessageBox("Commandes", "Export terminé.", QMessageBox::Information);
+}
+
+void MainWindow::chargerGraphiqueCommandes(QLabel *label, const QString &chemin)
+{
+    QPixmap img(chemin);
+    if (img.isNull()) {
+        qWarning("Graphique introuvable : vérifier ressources_commandes.qrc dans le .pro");
+        return;
+    }
+    label->setText(QString());
+    label->setAlignment(Qt::AlignCenter);
+    label->setPixmap(img.scaled(QSize(200, 150), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}
+
+void MainWindow::afficherFrequenceCommandes()
+{
+    // TODO : remplacer l'image par un vrai graphique calculé à partir des commandes
+    chargerGraphiqueCommandes(ui->lblGraphFreqCommande, ":/commandes/images_commandes/graph_frequence.png");
+}
+
+void MainWindow::afficherPrevisionCommandes()
+{
+    // TODO : remplacer l'image par un vrai graphique calculé à partir de l'historique
+    chargerGraphiqueCommandes(ui->lblGraphPrevCommande, ":/commandes/images_commandes/graph_prevision.png");
 }

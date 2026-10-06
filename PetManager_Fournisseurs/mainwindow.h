@@ -92,6 +92,20 @@ struct AnalyseStock {
     bool commandeEnCours = false;
 };
 
+// =====================================================================
+//                  Structure du module Commandes
+// =====================================================================
+
+struct CommandeListe {
+    int id = 0;
+    QDate dateCommande;
+    QDate dateLivraison;             // date invalide = pas de livraison prévue
+    QString statut;                  // "Commandée", "Livrée", "En retard", "Annulée"
+    QString fournisseur;
+    int quantite = 0;
+    double montant = 0;              // en TND
+};
+
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -236,5 +250,51 @@ private:  // module Stock
     QIcon iconeCategorie(const QString &categorie) const;
     static QIcon icone(const QString &nom);
     void ajusterHauteurTableau(QTableWidget *t, int lignes);
+
+    // =================================================================
+    //                       MODULE COMMANDES
+    // =================================================================
+private slots:  // module Commandes
+    void on_btn_menu_commandes_clicked();
+    void afficherFrequenceCommandes();
+    void afficherPrevisionCommandes();
+    void rafraichirTableauCommandes();
+    void afficherDetailsCommandes();
+    void nouvelleCommandeListe();
+    void enregistrerCommandeListe();
+    void exporterCommandesListe();
+
+private:  // module Commandes
+    QVector<CommandeListe> m_commandesListe;
+    int m_idCommandeEnEdition = -1;
+    int m_prochainIdCommande = 1;
+
+    void initialiserModuleCommandes();
+    void configurerTableauCommandes();
+    void chargerExempleCommandes();
+    void chargerGraphiqueCommandes(QLabel *label, const QString &chemin);
+    QWidget* creerActionsCommandes(int id);
+    int idCommandeSelectionnee() const;
+    int indexCommandeParId(int id) const;
+    QString texteIdCommande(int id) const;
+    void modifierCommandeListe(int id);
+    void supprimerCommandeListe(int id);
+    void viderFormulaireCommandes();
+
+    // =================================================================
+    //                       MODULE RENDEZ-VOUS
+    // =================================================================
+private slots:  // module Rendez-vous
+    void on_btn_menu_rdv_clicked();
+    void ajouterRdv();
+    void exporterPdfRdv();
+
+private:  // module Rendez-vous (code dans mainwindow_rdv.cpp)
+    void initialiserModuleRendezVous();
+    void chargerDonneesInitialesRdv();
+    void creerDonutRdv();
+    void creerPicRdv();
+    void remplirPicRdv(QFrame *cadre, const QString &titre,
+                       const QStringList &noms, const QList<int> &valeurs);
 };
 #endif // MAINWINDOW_H

@@ -11,6 +11,7 @@ SOURCES += \
     fournisseurdao.cpp \
     main.cpp \
     mainwindow.cpp \
+    mainwindow_rdv.cpp \
     mockcommandesprovider.cpp \
     supplierrecommender.cpp \
     badgedelegate.cpp \
@@ -31,4 +32,5 @@ HEADERS += \
 
 FORMS += mainwindow.ui
 RESOURCES += resources.qrc \
-    ressources.qrc
+    ressources.qrc \
+    ressources_commandes.qrc
